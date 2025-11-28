@@ -94,16 +94,16 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		aspect-ratio: 1;
-		background: linear-gradient(145deg, #2a2018, #1a1410);
-		border-radius: 8px;
-		border: 2px solid #4a3828;
+		width: 100%;
+		height: 100%;
+		background: transparent;
+		border-radius: 4px;
 		transition: all 0.2s ease;
 	}
 
 	.icon {
-		width: 70%;
-		height: 70%;
+		width: 85%;
+		height: 85%;
 	}
 
 	.winning {
