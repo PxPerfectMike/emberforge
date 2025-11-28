@@ -1,7 +1,7 @@
 // Core game types - extend these as you add features
 
 // Forge Wheel symbols
-export type SymbolId = 'slag' | 'coal' | 'ember' | 'ingot' | 'rune' | 'crown';
+export type SymbolId = 'slag' | 'coal' | 'ember' | 'ingot' | 'rune' | 'crown' | 'wild';
 
 export interface SymbolConfig {
 	id: SymbolId;
@@ -10,6 +10,15 @@ export interface SymbolConfig {
 	weight: number; // Higher = more likely to appear
 	baseValue: number; // Base coin value for matches
 	ticketChance?: number; // Chance to award tickets on match (0-1)
+	stackWeight?: number; // Chance to stack (0-1), higher = more likely to stack
+	isWild?: boolean; // Wild symbols substitute for any other
+}
+
+// Payline definition - array of [row, col] positions
+export interface Payline {
+	id: number;
+	name: string;
+	positions: [number, number][]; // [row, col] for each column
 }
 
 export interface GridCell {

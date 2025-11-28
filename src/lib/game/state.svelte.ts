@@ -7,7 +7,8 @@ function createInitialGrid(): GridCell[][] {
 	const pattern: SymbolId[][] = [
 		['coal', 'ember', 'ingot', 'ember', 'coal'],
 		['slag', 'rune', 'crown', 'rune', 'slag'],
-		['coal', 'ember', 'ingot', 'ember', 'coal']
+		['ember', 'coal', 'ingot', 'coal', 'ember'],
+		['coal', 'slag', 'ember', 'slag', 'coal']
 	];
 
 	return pattern.map((row, rowIndex) =>

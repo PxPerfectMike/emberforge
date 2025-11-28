@@ -16,7 +16,8 @@
 		ember: { primary: '#ff6b35', secondary: '#ff4500', glow: '#ff8c00' },
 		ingot: { primary: '#c0c0c0', secondary: '#a0a0a0', glow: '#e0e0e0' },
 		rune: { primary: '#9b59b6', secondary: '#8e44ad', glow: '#bb6bd9' },
-		crown: { primary: '#ffd700', secondary: '#ffaa00', glow: '#ffee88' }
+		crown: { primary: '#ffd700', secondary: '#ffaa00', glow: '#ffee88' },
+		wild: { primary: '#00ff88', secondary: '#00cc66', glow: '#66ffbb' }
 	};
 
 	const colors = $derived(symbolColors[symbolId]);
@@ -62,6 +63,28 @@
 			<!-- Dripping effect -->
 			<ellipse cx="30" cy="82" rx="3" ry="5" fill={colors.secondary} opacity="0.7" />
 			<ellipse cx="70" cy="84" rx="2" ry="4" fill={colors.secondary} opacity="0.7" />
+		{:else if symbolId === 'wild'}
+			<!-- Forge Fire Wild - mystical green flame -->
+			<defs>
+				<radialGradient id="wildGlow" cx="50%" cy="70%" r="50%">
+					<stop offset="0%" stop-color={colors.glow} stop-opacity="0.8" />
+					<stop offset="100%" stop-color={colors.primary} stop-opacity="0" />
+				</radialGradient>
+			</defs>
+			<!-- Outer glow -->
+			<ellipse cx="50" cy="65" rx="35" ry="25" fill="url(#wildGlow)" />
+			<!-- Main flame -->
+			<path d="M50,10 Q70,30 60,50 Q75,55 65,70 Q70,80 50,90 Q30,80 35,70 Q25,55 40,50 Q30,30 50,10"
+				fill={colors.primary} />
+			<!-- Inner flame -->
+			<path d="M50,25 Q62,40 55,55 Q62,62 55,75 Q58,82 50,85 Q42,82 45,75 Q38,62 45,55 Q38,40 50,25"
+				fill={colors.secondary} />
+			<!-- Core glow -->
+			<path d="M50,40 Q56,50 52,60 Q55,68 50,75 Q45,68 48,60 Q44,50 50,40"
+				fill={colors.glow} />
+			<ellipse cx="50" cy="58" rx="6" ry="10" fill="#ffffff" opacity="0.7" />
+			<!-- "WILD" text -->
+			<text x="50" y="98" text-anchor="middle" font-size="12" font-weight="bold" fill={colors.glow}>WILD</text>
 		{/if}
 	</svg>
 </div>
