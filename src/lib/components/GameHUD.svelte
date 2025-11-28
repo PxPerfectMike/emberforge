@@ -5,7 +5,11 @@
 		coins: number;
 		tickets: number;
 		debt: number;
+		tributePaid: number;
+		tributeProgress: number;
+		tributeBonus: number;
 		cycle: number;
+		round: number;
 		spinsRemaining: number;
 		spinsPerBatch: number;
 		heat: number;
@@ -14,10 +18,9 @@
 		phase: GamePhase;
 	}
 
-	let { coins, tickets, debt, cycle, spinsRemaining, spinsPerBatch, heat, lastPayout, lastTickets, phase }: Props = $props();
+	let { coins, tickets, debt, tributePaid, tributeProgress, tributeBonus, cycle, round, spinsRemaining, spinsPerBatch, heat, lastPayout, lastTickets, phase }: Props = $props();
 
-	const debtProgress = $derived(Math.min((coins / debt) * 100, 100));
-	const showSpinDots = $derived(phase !== 'buy_spins' && phase !== 'pay_tribute' && phase !== 'lose');
+	const showSpinDots = $derived(phase === 'idle' || phase === 'spinning' || phase === 'revealing' || phase === 'win');
 	const heatColor = $derived(
 		heat < 40 ? '#4ade80' :
 		heat < 70 ? '#fbbf24' :
@@ -54,32 +57,32 @@
 		</div>
 
 		<div class="cycle-display">
-			<span class="cycle-label">CYCLE {cycle}</span>
+			<span class="cycle-label">CYCLE {cycle}{round > 0 ? `.${round}` : ''}</span>
 			{#if showSpinDots}
 				<div class="spins-remaining">
 					<span class="spins-count">{spinsRemaining}/{spinsPerBatch}</span>
 				</div>
-			{:else if phase === 'buy_spins'}
-				<span class="phase-indicator buy">BUY SPINS</span>
-			{:else if phase === 'pay_tribute'}
-				<span class="phase-indicator tribute">PAY TRIBUTE</span>
+			{:else if phase === 'between_rounds'}
+				<span class="phase-indicator between">BETWEEN ROUNDS</span>
 			{/if}
 		</div>
 
 		<div class="demand-section">
 			<div class="demand-header">
-				<span class="demand-label">THE FORGE DEMANDS</span>
-				<span class="demand-value">{debt}</span>
+				<span class="demand-label">TRIBUTE PAID</span>
+				<span class="demand-value">{tributePaid}/{debt}</span>
 			</div>
 			<div class="demand-bar">
-				<div class="demand-progress" style="width: {debtProgress}%"></div>
-				<div class="demand-marker" style="left: {Math.min(debtProgress, 100)}%"></div>
+				<div class="demand-progress" style="width: {tributeProgress}%"></div>
+				<div class="demand-marker" style="left: {Math.min(tributeProgress, 100)}%"></div>
 			</div>
 			<div class="demand-status">
-				{#if coins >= debt}
-					<span class="can-pay">TRIBUTE READY</span>
+				{#if tributeProgress >= 100}
+					<span class="can-pay">CYCLE COMPLETE</span>
+				{:else if tributeBonus > 1}
+					<span class="bonus-active">BONUS: x{tributeBonus.toFixed(2)}</span>
 				{:else}
-					<span class="need-more">NEED {debt - coins} MORE</span>
+					<span class="need-more">PAY TRIBUTE FOR BONUS</span>
 				{/if}
 			</div>
 		</div>
@@ -212,22 +215,15 @@
 		letter-spacing: 1px;
 	}
 
-	.phase-indicator.buy {
-		background: rgba(74, 222, 128, 0.2);
+	.phase-indicator.between {
+		background: rgba(251, 191, 36, 0.2);
+		color: #fbbf24;
+		border: 1px solid #fbbf24;
+	}
+
+	.bonus-active {
 		color: #4ade80;
-		border: 1px solid #4ade80;
-	}
-
-	.phase-indicator.tribute {
-		background: rgba(255, 107, 53, 0.2);
-		color: #ff6b35;
-		border: 1px solid #ff6b35;
-		animation: pulse-tribute 1s ease-in-out infinite;
-	}
-
-	@keyframes pulse-tribute {
-		0%, 100% { opacity: 0.8; }
-		50% { opacity: 1; }
+		text-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
 	}
 
 	.demand-section {

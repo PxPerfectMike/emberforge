@@ -45,14 +45,13 @@ export interface GameConfig {
 }
 
 // Game phases:
-// 'buy_spins' - Need to purchase spins to continue
+// 'between_rounds' - Can pay tribute or buy spins
 // 'idle' - Ready to spin (have spins remaining)
 // 'spinning' - Wheel is spinning
 // 'revealing' - Revealing results
 // 'win' - Showing win animation
-// 'pay_tribute' - Cycle ended, must pay tribute
-// 'lose' - Failed to pay tribute
-export type GamePhase = 'buy_spins' | 'idle' | 'spinning' | 'revealing' | 'win' | 'pay_tribute' | 'lose';
+// 'lose' - Failed to pay tribute / can't continue
+export type GamePhase = 'between_rounds' | 'idle' | 'spinning' | 'revealing' | 'win' | 'lose';
 
 export interface GameState {
 	coins: number;

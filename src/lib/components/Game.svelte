@@ -19,7 +19,11 @@
 			coins={gameState.coins}
 			tickets={gameState.tickets}
 			debt={gameState.debt}
+			tributePaid={gameState.tributePaid}
+			tributeProgress={gameState.tributeProgress}
+			tributeBonus={gameState.tributeBonus}
 			cycle={gameState.cycle}
+			round={gameState.round}
 			spinsRemaining={gameState.spinsRemaining}
 			spinsPerBatch={gameState.spinsPerBatch}
 			heat={gameState.forgeHeat}
@@ -35,36 +39,52 @@
 		/>
 
 		<div class="controls">
-			{#if gameState.phase === 'buy_spins'}
-				<!-- Buy spins at start of cycle -->
-				<button
-					class="buy-spins-button"
-					class:disabled={!gameState.canBuySpins}
-					disabled={!gameState.canBuySpins}
-					onclick={() => gameState.buySpins()}
-				>
-					<span class="btn-text">BUY {gameState.spinsPerBatch} SPINS</span>
-					<span class="btn-cost">-{gameState.spinBatchCost} coins</span>
-				</button>
-			{:else if gameState.phase === 'pay_tribute'}
-				<!-- Pay tribute at end of cycle -->
-				<button
-					class="pay-tribute-button"
-					class:disabled={!gameState.canPayTribute}
-					disabled={!gameState.canPayTribute}
-					onclick={() => gameState.payTribute()}
-				>
-					<span class="btn-text">PAY TRIBUTE</span>
-					<span class="btn-cost">-{gameState.debt} coins</span>
-				</button>
-				{#if !gameState.canPayTribute}
+			{#if gameState.phase === 'between_rounds'}
+				<!-- Between rounds: can pay tribute or buy spins -->
+				{#if gameState.tributeRemaining > 0}
+					<div class="tribute-section">
+						<div class="tribute-info">
+							<span class="tribute-label">TRIBUTE REMAINING</span>
+							<span class="tribute-amount">{gameState.tributeRemaining}</span>
+						</div>
+						{#if gameState.tributeBonus > 1}
+							<div class="bonus-indicator">
+								BONUS: x{gameState.tributeBonus.toFixed(2)}
+							</div>
+						{/if}
+						{#if gameState.canPayTribute}
+							<button
+								class="pay-tribute-button"
+								onclick={() => gameState.payTribute()}
+							>
+								<span class="btn-text">PAY TRIBUTE</span>
+								<span class="btn-cost">-{gameState.maxTributePayment} coins (max)</span>
+							</button>
+						{/if}
+					</div>
+				{:else}
+					<div class="tribute-complete">
+						TRIBUTE COMPLETE - NEXT CYCLE READY
+					</div>
+				{/if}
+
+				{#if gameState.isStuck}
+					<!-- Can't afford spins and tribute not paid -->
 					<p class="tribute-warning">Not enough coins! The forge will consume you...</p>
-					<button class="accept-fate-button" onclick={() => gameState.payTribute()}>
+					<button class="accept-fate-button" onclick={() => gameState.acceptFate()}>
 						ACCEPT YOUR FATE
+					</button>
+				{:else if gameState.canBuySpins}
+					<button
+						class="buy-spins-button"
+						onclick={() => gameState.buySpins()}
+					>
+						<span class="btn-text">BUY {gameState.spinsPerBatch} SPINS</span>
+						<span class="btn-cost">-{gameState.spinBatchCost} coins</span>
 					</button>
 				{/if}
 			{:else}
-				<!-- Normal spin button -->
+				<!-- During spins: show spin button -->
 				<SpinButton
 					canSpin={gameState.canSpin}
 					{isSpinning}
@@ -143,6 +163,65 @@
 		margin-top: auto;
 	}
 
+	.tribute-section {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 12px;
+		background: linear-gradient(145deg, #2a1510, #1a0a05);
+		border: 1px solid #4a2515;
+		border-radius: 8px;
+	}
+
+	.tribute-info {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.tribute-label {
+		font-size: clamp(0.7rem, 2.5vw, 0.85rem);
+		color: #ff6b6b;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+
+	.tribute-amount {
+		font-size: clamp(1.1rem, 4vw, 1.4rem);
+		font-weight: bold;
+		color: #ff6b6b;
+		font-family: monospace;
+	}
+
+	.bonus-indicator {
+		font-size: clamp(0.7rem, 2.5vw, 0.85rem);
+		color: #4ade80;
+		text-align: center;
+		padding: 4px 8px;
+		background: rgba(74, 222, 128, 0.1);
+		border: 1px solid rgba(74, 222, 128, 0.3);
+		border-radius: 4px;
+		text-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+	}
+
+	.tribute-complete {
+		font-size: clamp(0.8rem, 3vw, 1rem);
+		color: #4ade80;
+		text-align: center;
+		padding: 12px;
+		background: rgba(74, 222, 128, 0.1);
+		border: 1px solid rgba(74, 222, 128, 0.3);
+		border-radius: 8px;
+		text-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+		letter-spacing: 1px;
+		animation: pulse-complete 2s ease-in-out infinite;
+	}
+
+	@keyframes pulse-complete {
+		0%, 100% { opacity: 0.8; box-shadow: 0 0 10px rgba(74, 222, 128, 0.2); }
+		50% { opacity: 1; box-shadow: 0 0 20px rgba(74, 222, 128, 0.4); }
+	}
+
 	.pay-tribute-button {
 		width: 100%;
 		padding: clamp(10px, 3vw, 14px);
@@ -163,14 +242,6 @@
 	.pay-tribute-button:active {
 		transform: translateY(2px);
 		box-shadow: 0 1px 0 #996600;
-	}
-
-	.pay-tribute-button.disabled,
-	.buy-spins-button.disabled {
-		background: linear-gradient(180deg, #3a3a3a, #2a2a2a);
-		box-shadow: 0 3px 0 #1a1a1a;
-		cursor: not-allowed;
-		opacity: 0.6;
 	}
 
 	.buy-spins-button {
