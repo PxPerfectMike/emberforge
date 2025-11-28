@@ -25,19 +25,19 @@
 <style>
 	.forge-button {
 		width: 100%;
-		padding: clamp(14px, 4vw, 20px);
-		font-size: clamp(1rem, 4.5vw, 1.4rem);
+		padding: clamp(10px, 3vw, 16px);
+		font-size: clamp(0.9rem, 4vw, 1.2rem);
 		font-weight: bold;
 		text-transform: uppercase;
 		letter-spacing: 2px;
 		color: #fff;
 		background: linear-gradient(180deg, #ff6b35 0%, #cc4400 50%, #992200 100%);
 		border: none;
-		border-radius: 8px;
+		border-radius: 6px;
 		cursor: pointer;
 		box-shadow:
-			0 4px 0 #661500,
-			0 6px 20px rgba(255, 107, 53, 0.3),
+			0 3px 0 #661500,
+			0 4px 15px rgba(255, 107, 53, 0.3),
 			inset 0 1px 0 rgba(255, 200, 150, 0.3);
 		transition: all 0.1s ease;
 		display: flex;

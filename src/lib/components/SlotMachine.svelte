@@ -46,19 +46,26 @@
 		width: 100%;
 		max-width: 100%;
 		position: relative;
+		flex: 1;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.anvil-frame {
 		background: linear-gradient(180deg, #2a1a10 0%, #1a0f08 100%);
-		border: 4px solid #4a3020;
-		border-radius: 12px;
-		padding: clamp(8px, 2vw, 16px);
+		border: 3px solid #4a3020;
+		border-radius: 8px;
+		padding: clamp(6px, 1.5vw, 12px);
 		box-shadow:
 			inset 0 2px 10px rgba(0, 0, 0, 0.8),
 			0 4px 20px rgba(0, 0, 0, 0.5),
 			0 0 calc(var(--heat) * 0.5px) var(--heat-glow);
 		position: relative;
 		overflow: hidden;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.forge-rivets {
@@ -82,17 +89,19 @@
 	.wheel-container {
 		display: flex;
 		flex-direction: column;
-		gap: clamp(4px, 1vw, 8px);
+		gap: clamp(3px, 0.8vw, 6px);
 		background: linear-gradient(180deg, #0f0a05 0%, #1a0f08 100%);
-		border-radius: 8px;
-		padding: clamp(6px, 1.5vw, 12px);
+		border-radius: 6px;
+		padding: clamp(4px, 1vw, 10px);
 		border: 2px solid #3a2515;
+		flex: 1;
+		justify-content: center;
 	}
 
 	.row {
 		display: grid;
 		grid-template-columns: repeat(5, 1fr);
-		gap: clamp(4px, 1vw, 8px);
+		gap: clamp(3px, 0.8vw, 6px);
 	}
 
 	.cell {

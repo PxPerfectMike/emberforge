@@ -113,9 +113,9 @@
 
 	.terminal-frame {
 		background: linear-gradient(180deg, #1a1208 0%, #0f0a05 100%);
-		border: 3px solid #4a3520;
-		border-radius: 8px;
-		padding: clamp(10px, 2.5vw, 16px);
+		border: 2px solid #4a3520;
+		border-radius: 6px;
+		padding: clamp(6px, 2vw, 12px);
 		box-shadow:
 			inset 0 0 20px rgba(255, 100, 0, 0.1),
 			0 0 calc(var(--heat) * 0.3px) rgba(255, 100, 0, 0.3);
@@ -125,9 +125,9 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 8px;
-		margin-bottom: 12px;
-		padding-bottom: 8px;
+		gap: 6px;
+		margin-bottom: 8px;
+		padding-bottom: 6px;
 		border-bottom: 1px solid #3a2515;
 	}
 
@@ -150,23 +150,23 @@
 	.stat-row {
 		display: flex;
 		justify-content: space-between;
-		gap: 12px;
-		margin-bottom: 10px;
+		gap: 8px;
+		margin-bottom: 6px;
 	}
 
 	.stat {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: 6px;
 	}
 
 	.coin-icon, .ticket-icon {
-		width: clamp(20px, 5vw, 28px);
-		height: clamp(20px, 5vw, 28px);
+		width: clamp(18px, 4vw, 24px);
+		height: clamp(18px, 4vw, 24px);
 	}
 
 	.value {
-		font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+		font-size: clamp(1rem, 4vw, 1.3rem);
 		font-weight: bold;
 		color: #ffd700;
 		font-family: monospace;
@@ -180,8 +180,8 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 10px;
-		padding: 6px 10px;
+		margin-bottom: 6px;
+		padding: 4px 8px;
 		background: rgba(0, 0, 0, 0.3);
 		border-radius: 4px;
 	}
@@ -228,17 +228,17 @@
 
 	.demand-section {
 		background: linear-gradient(145deg, #2a1510, #1a0a05);
-		padding: clamp(8px, 2vw, 12px);
-		border-radius: 6px;
+		padding: clamp(6px, 1.5vw, 10px);
+		border-radius: 4px;
 		border: 1px solid #4a2515;
-		margin-bottom: 10px;
+		margin-bottom: 6px;
 	}
 
 	.demand-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 6px;
+		margin-bottom: 4px;
 	}
 
 	.demand-label {
@@ -256,9 +256,9 @@
 	}
 
 	.demand-bar {
-		height: 10px;
+		height: 8px;
 		background: #0a0505;
-		border-radius: 5px;
+		border-radius: 4px;
 		overflow: visible;
 		position: relative;
 	}
@@ -266,24 +266,24 @@
 	.demand-progress {
 		height: 100%;
 		background: linear-gradient(90deg, #ff6b35, #ffd700);
-		border-radius: 5px;
+		border-radius: 4px;
 		transition: width 0.3s ease;
 	}
 
 	.demand-marker {
 		position: absolute;
-		top: -2px;
-		width: 4px;
-		height: 14px;
+		top: -1px;
+		width: 3px;
+		height: 10px;
 		background: #fff;
 		border-radius: 2px;
 		transform: translateX(-50%);
-		box-shadow: 0 0 6px #fff;
+		box-shadow: 0 0 4px #fff;
 	}
 
 	.demand-status {
-		margin-top: 6px;
-		font-size: clamp(0.65rem, 2vw, 0.75rem);
+		margin-top: 4px;
+		font-size: clamp(0.6rem, 1.8vw, 0.7rem);
 		text-align: center;
 		letter-spacing: 1px;
 	}
@@ -300,19 +300,19 @@
 	.heat-gauge {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: 6px;
 	}
 
 	.heat-label {
-		font-size: clamp(0.6rem, 2vw, 0.7rem);
+		font-size: clamp(0.55rem, 1.8vw, 0.65rem);
 		color: #666;
 		text-transform: uppercase;
-		min-width: 35px;
+		min-width: 30px;
 	}
 
 	.heat-bar {
 		flex: 1;
-		height: 6px;
+		height: 5px;
 		background: #1a0a05;
 		border-radius: 3px;
 		overflow: hidden;

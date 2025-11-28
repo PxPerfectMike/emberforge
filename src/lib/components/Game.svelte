@@ -124,8 +124,8 @@
 		max-height: 100dvh;
 		display: flex;
 		flex-direction: column;
-		gap: clamp(10px, 2.5vw, 16px);
-		padding: clamp(12px, 3vw, 20px);
+		gap: clamp(6px, 1.5vh, 12px);
+		padding: clamp(8px, 2vw, 16px);
 		box-sizing: border-box;
 		overflow: hidden;
 		z-index: 1;
@@ -138,7 +138,7 @@
 
 	.title {
 		margin: 0;
-		font-size: clamp(1.4rem, 6vw, 2rem);
+		font-size: clamp(1.2rem, 5vw, 1.8rem);
 		color: #ff6b35;
 		text-shadow:
 			0 0 20px rgba(255, 107, 53, 0.5),
@@ -150,7 +150,7 @@
 	.title-decoration {
 		width: 60%;
 		height: 2px;
-		margin: 8px auto 0;
+		margin: 4px auto 0;
 		background: linear-gradient(90deg, transparent, #ff6b35, transparent);
 		opacity: 0.5;
 	}
@@ -158,7 +158,7 @@
 	.controls {
 		display: flex;
 		flex-direction: column;
-		gap: 10px;
+		gap: clamp(6px, 1.5vh, 10px);
 		flex-shrink: 0;
 		margin-top: auto;
 	}
@@ -166,11 +166,11 @@
 	.tribute-section {
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
-		padding: 12px;
+		gap: clamp(4px, 1vh, 8px);
+		padding: clamp(8px, 2vw, 12px);
 		background: linear-gradient(145deg, #2a1510, #1a0a05);
 		border: 1px solid #4a2515;
-		border-radius: 8px;
+		border-radius: 6px;
 	}
 
 	.tribute-info {
@@ -205,13 +205,13 @@
 	}
 
 	.tribute-complete {
-		font-size: clamp(0.8rem, 3vw, 1rem);
+		font-size: clamp(0.7rem, 2.5vw, 0.9rem);
 		color: #4ade80;
 		text-align: center;
-		padding: 12px;
+		padding: clamp(8px, 2vw, 12px);
 		background: rgba(74, 222, 128, 0.1);
 		border: 1px solid rgba(74, 222, 128, 0.3);
-		border-radius: 8px;
+		border-radius: 6px;
 		text-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
 		letter-spacing: 1px;
 		animation: pulse-complete 2s ease-in-out infinite;
@@ -224,15 +224,15 @@
 
 	.pay-tribute-button {
 		width: 100%;
-		padding: clamp(10px, 3vw, 14px);
-		font-size: clamp(0.85rem, 3.5vw, 1rem);
+		padding: clamp(8px, 2vw, 12px);
+		font-size: clamp(0.75rem, 3vw, 0.9rem);
 		font-weight: bold;
 		color: #1a0a00;
 		background: linear-gradient(180deg, #ffd700, #ffaa00);
 		border: none;
-		border-radius: 8px;
+		border-radius: 6px;
 		cursor: pointer;
-		box-shadow: 0 3px 0 #996600;
+		box-shadow: 0 2px 0 #996600;
 		transition: all 0.1s ease;
 		touch-action: manipulation;
 		text-transform: uppercase;
@@ -246,13 +246,13 @@
 
 	.buy-spins-button {
 		width: 100%;
-		padding: clamp(10px, 3vw, 14px);
-		font-size: clamp(0.85rem, 3.5vw, 1rem);
+		padding: clamp(10px, 2.5vw, 14px);
+		font-size: clamp(0.8rem, 3.5vw, 1rem);
 		font-weight: bold;
 		color: #1a0a00;
 		background: linear-gradient(180deg, #4ade80, #22c55e);
 		border: none;
-		border-radius: 8px;
+		border-radius: 6px;
 		cursor: pointer;
 		box-shadow: 0 3px 0 #166534;
 		transition: all 0.1s ease;
