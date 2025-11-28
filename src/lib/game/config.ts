@@ -5,10 +5,10 @@ export const DEFAULT_CONFIG: GameConfig = {
 	rows: 3,
 	cols: 5,
 	startingCoins: 100,
-	spinCost: 5,
-	debtBase: 50,
-	debtMultiplier: 1.5, // Each cycle increases the forge's demand
-	spinsPerCycle: 3 // Spins before the forge demands payment
+	spinBatchCost: 20, // Cost to buy a batch of spins at start of cycle
+	debtBase: 30, // Starting tribute demand (easier early game)
+	debtMultiplier: 1.3, // Each cycle increases the forge's demand
+	spinsPerCycle: 7 // Number of spins you get per batch
 };
 
 // Win multipliers based on match count (3, 4, or 5 in a row)

@@ -1,6 +1,6 @@
 import type { GamePhase, GridCell, WinLine, SymbolId } from './types';
 import { DEFAULT_CONFIG, TIMING } from './config';
-import { executeSpin, generateGrid, calculateDebt, calculateHeat } from './engine';
+import { executeSpin, calculateDebt, calculateHeat } from './engine';
 
 // Create a deterministic initial grid to avoid SSR hydration mismatch
 function createInitialGrid(): GridCell[][] {
@@ -26,8 +26,8 @@ function createGameState() {
 	let tickets = $state(0);
 	let debt = $state(calculateDebt(1));
 	let cycle = $state(1);
-	let spinsThisCycle = $state(0);
-	let phase = $state<GamePhase>('idle');
+	let spinsRemaining = $state(0); // Spins left in current batch
+	let phase = $state<GamePhase>('buy_spins'); // Start by buying spins
 	let grid = $state<GridCell[][]>(createInitialGrid());
 	let lastWinLines = $state<WinLine[]>([]);
 	let lastPayout = $state(0);
@@ -35,17 +35,26 @@ function createGameState() {
 	let forgeHeat = $state(20);
 
 	// Derived state
-	const canSpin = $derived(phase === 'idle' && coins >= DEFAULT_CONFIG.spinCost);
+	const canBuySpins = $derived(phase === 'buy_spins' && coins >= DEFAULT_CONFIG.spinBatchCost);
+	const canSpin = $derived(phase === 'idle' && spinsRemaining > 0);
+	const canPayTribute = $derived(phase === 'pay_tribute' && coins >= debt);
 	const isGameOver = $derived(phase === 'lose');
-	const spinsRemaining = $derived(DEFAULT_CONFIG.spinsPerCycle - spinsThisCycle);
+
+	// Buy a batch of spins at the start of a cycle
+	function buySpins() {
+		if (!canBuySpins) return;
+
+		coins -= DEFAULT_CONFIG.spinBatchCost;
+		spinsRemaining = DEFAULT_CONFIG.spinsPerCycle;
+		phase = 'idle';
+		forgeHeat = 20;
+	}
 
 	async function spin() {
 		if (!canSpin) return;
 
-		// Deduct spin cost
-		coins -= DEFAULT_CONFIG.spinCost;
 		phase = 'spinning';
-		spinsThisCycle++;
+		spinsRemaining--;
 
 		// Simulate spinning animation delay
 		await delay(TIMING.spinDuration * DEFAULT_CONFIG.cols);
@@ -69,28 +78,28 @@ function createGameState() {
 			await delay(TIMING.winHighlightDuration);
 		}
 
-		// Update forge heat
+		// Update forge heat based on progress toward tribute
 		forgeHeat = calculateHeat(coins, debt, spinsRemaining);
 
-		// Check cycle end
-		if (spinsThisCycle >= DEFAULT_CONFIG.spinsPerCycle) {
-			checkCycleEnd();
+		// Check if spins are exhausted
+		if (spinsRemaining <= 0) {
+			// Time to pay tribute
+			phase = 'pay_tribute';
 		} else {
 			phase = 'idle';
 		}
 	}
 
-	function checkCycleEnd() {
+	// Pay the forge's tribute at end of cycle
+	function payTribute() {
 		if (coins >= debt) {
-			// Paid the forge's demand, advance to next cycle
 			coins -= debt;
 			cycle++;
 			debt = calculateDebt(cycle);
-			spinsThisCycle = 0;
 			forgeHeat = 20;
-			phase = 'idle';
+			phase = 'buy_spins'; // Ready to buy next batch
 		} else {
-			// The forge consumes you
+			// Can't pay - the forge consumes you
 			forgeHeat = 100;
 			phase = 'lose';
 		}
@@ -101,8 +110,8 @@ function createGameState() {
 		tickets = 0;
 		debt = calculateDebt(1);
 		cycle = 1;
-		spinsThisCycle = 0;
-		phase = 'idle';
+		spinsRemaining = 0;
+		phase = 'buy_spins';
 		grid = createInitialGrid();
 		lastWinLines = [];
 		lastPayout = 0;
@@ -110,35 +119,28 @@ function createGameState() {
 		forgeHeat = 20;
 	}
 
-	function payDebt() {
-		if (coins >= debt) {
-			coins -= debt;
-			cycle++;
-			debt = calculateDebt(cycle);
-			spinsThisCycle = 0;
-			forgeHeat = 20;
-		}
-	}
-
 	return {
 		get coins() { return coins; },
 		get tickets() { return tickets; },
 		get debt() { return debt; },
 		get cycle() { return cycle; },
-		get spinsThisCycle() { return spinsThisCycle; },
+		get spinsRemaining() { return spinsRemaining; },
 		get phase() { return phase; },
 		get grid() { return grid; },
 		get lastWinLines() { return lastWinLines; },
 		get lastPayout() { return lastPayout; },
 		get lastTickets() { return lastTickets; },
 		get forgeHeat() { return forgeHeat; },
+		get canBuySpins() { return canBuySpins; },
 		get canSpin() { return canSpin; },
+		get canPayTribute() { return canPayTribute; },
 		get isGameOver() { return isGameOver; },
-		get spinsRemaining() { return spinsRemaining; },
-		get spinCost() { return DEFAULT_CONFIG.spinCost; },
+		get spinBatchCost() { return DEFAULT_CONFIG.spinBatchCost; },
+		get spinsPerBatch() { return DEFAULT_CONFIG.spinsPerCycle; },
+		buySpins,
 		spin,
-		reset,
-		payDebt
+		payTribute,
+		reset
 	};
 }
 

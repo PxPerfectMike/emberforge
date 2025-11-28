@@ -38,13 +38,21 @@ export interface GameConfig {
 	rows: number;
 	cols: number;
 	startingCoins: number;
-	spinCost: number;
+	spinBatchCost: number; // Cost to buy a batch of spins
 	debtBase: number;
 	debtMultiplier: number;
-	spinsPerCycle: number; // renamed from roundsPerDeadline
+	spinsPerCycle: number; // How many spins per batch
 }
 
-export type GamePhase = 'idle' | 'spinning' | 'revealing' | 'win' | 'lose';
+// Game phases:
+// 'buy_spins' - Need to purchase spins to continue
+// 'idle' - Ready to spin (have spins remaining)
+// 'spinning' - Wheel is spinning
+// 'revealing' - Revealing results
+// 'win' - Showing win animation
+// 'pay_tribute' - Cycle ended, must pay tribute
+// 'lose' - Failed to pay tribute
+export type GamePhase = 'buy_spins' | 'idle' | 'spinning' | 'revealing' | 'win' | 'pay_tribute' | 'lose';
 
 export interface GameState {
 	coins: number;

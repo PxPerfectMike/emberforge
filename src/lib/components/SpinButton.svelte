@@ -2,11 +2,10 @@
 	interface Props {
 		canSpin: boolean;
 		isSpinning: boolean;
-		spinCost: number;
 		onclick: () => void;
 	}
 
-	let { canSpin, isSpinning, spinCost, onclick }: Props = $props();
+	let { canSpin, isSpinning, onclick }: Props = $props();
 </script>
 
 <button
@@ -20,7 +19,6 @@
 		<span class="forge-spinner"></span>
 	{:else}
 		<span class="text">WORK THE FORGE</span>
-		<span class="cost">-{spinCost} coins</span>
 	{/if}
 </button>
 
@@ -88,12 +86,6 @@
 	.text {
 		line-height: 1;
 		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-	}
-
-	.cost {
-		font-size: clamp(0.65rem, 2.5vw, 0.85rem);
-		opacity: 0.9;
-		font-weight: normal;
 	}
 
 	.forge-spinner {

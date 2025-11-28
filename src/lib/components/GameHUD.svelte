@@ -1,18 +1,23 @@
 <script lang="ts">
+	import type { GamePhase } from '$lib/game/types';
+
 	interface Props {
 		coins: number;
 		tickets: number;
 		debt: number;
 		cycle: number;
 		spinsRemaining: number;
+		spinsPerBatch: number;
 		heat: number;
 		lastPayout: number;
 		lastTickets: number;
+		phase: GamePhase;
 	}
 
-	let { coins, tickets, debt, cycle, spinsRemaining, heat, lastPayout, lastTickets }: Props = $props();
+	let { coins, tickets, debt, cycle, spinsRemaining, spinsPerBatch, heat, lastPayout, lastTickets, phase }: Props = $props();
 
 	const debtProgress = $derived(Math.min((coins / debt) * 100, 100));
+	const showSpinDots = $derived(phase !== 'buy_spins' && phase !== 'pay_tribute' && phase !== 'lose');
 	const heatColor = $derived(
 		heat < 40 ? '#4ade80' :
 		heat < 70 ? '#fbbf24' :
@@ -50,11 +55,15 @@
 
 		<div class="cycle-display">
 			<span class="cycle-label">CYCLE {cycle}</span>
-			<div class="spins-remaining">
-				{#each Array(3) as _, i}
-					<span class="spin-dot" class:used={i >= spinsRemaining}></span>
-				{/each}
-			</div>
+			{#if showSpinDots}
+				<div class="spins-remaining">
+					<span class="spins-count">{spinsRemaining}/{spinsPerBatch}</span>
+				</div>
+			{:else if phase === 'buy_spins'}
+				<span class="phase-indicator buy">BUY SPINS</span>
+			{:else if phase === 'pay_tribute'}
+				<span class="phase-indicator tribute">PAY TRIBUTE</span>
+			{/if}
 		</div>
 
 		<div class="demand-section">
@@ -183,21 +192,42 @@
 
 	.spins-remaining {
 		display: flex;
-		gap: 6px;
+		align-items: center;
 	}
 
-	.spin-dot {
-		width: 12px;
-		height: 12px;
-		background: #ff6b35;
-		border-radius: 50%;
-		box-shadow: 0 0 6px #ff6b35;
-		transition: all 0.3s ease;
+	.spins-count {
+		font-size: clamp(0.8rem, 3vw, 1rem);
+		color: #ff6b35;
+		font-weight: bold;
+		font-family: monospace;
+		text-shadow: 0 0 6px rgba(255, 107, 53, 0.5);
 	}
 
-	.spin-dot.used {
-		background: #2a1a10;
-		box-shadow: none;
+	.phase-indicator {
+		font-size: clamp(0.6rem, 2vw, 0.75rem);
+		font-weight: bold;
+		padding: 2px 8px;
+		border-radius: 4px;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+
+	.phase-indicator.buy {
+		background: rgba(74, 222, 128, 0.2);
+		color: #4ade80;
+		border: 1px solid #4ade80;
+	}
+
+	.phase-indicator.tribute {
+		background: rgba(255, 107, 53, 0.2);
+		color: #ff6b35;
+		border: 1px solid #ff6b35;
+		animation: pulse-tribute 1s ease-in-out infinite;
+	}
+
+	@keyframes pulse-tribute {
+		0%, 100% { opacity: 0.8; }
+		50% { opacity: 1; }
 	}
 
 	.demand-section {
