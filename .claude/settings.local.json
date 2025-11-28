@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:gameplay.tips)",
+      "WebFetch(domain:store.steampowered.com)",
+      "Bash(npm create:*)",
+      "Bash(npx sv create . --template minimal --types ts --no-install --no-add-ons)",
+      "Bash(npx sv create:*)",
+      "Bash(npm run build:*)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
